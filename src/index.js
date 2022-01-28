@@ -25,7 +25,7 @@ const createPopup = () => {
         width: 800,
         height: 300,
         x: 0, y: 0,
-        frame: false,
+        frame: true,
         webPreferences: {
             preload: path.join(__dirname, 'windows/popup/popupPreload.js')
         }
@@ -51,7 +51,7 @@ const showStatsPopup = (settings, stats) => {
     let arg = { settings: settings, stats: stats }
     console.log(arg)
     popupWindow.webContents.send('update-stats', arg)
-    setTimeout(() => { closeStatsPopup()}, 10000)
+    //setTimeout(() => { closeStatsPopup()}, 10000)
 }
 
 const closeStatsPopup = () => {
