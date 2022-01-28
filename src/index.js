@@ -1,16 +1,8 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
-const Store = require('electron-store')
-const settingsSchema = {
-    slippiReplayDir: {
-        type: 'string'
-    },
-    slippiPlayerCode: {
-        type: 'string'
-    }
-}
-const store = new Store({settingsSchema});
 const slippiReplayWatcher = require('./modules/slippiReplayWatcher')
+const settings = require('./modules/settings')
+const fs = require('fs')
 
 
 let mainWindow;
@@ -30,12 +22,12 @@ const createWindow = () => {
 
 const createPopup = () => {
     popupWindow = new BrowserWindow({
-        width: 300,
+        width: 800,
         height: 300,
         x: 0, y: 0,
         frame: false,
         webPreferences: {
-            preload: path.join(__dirname, 'src/windows/popup/popupPreload.js')
+            preload: path.join(__dirname, 'windows/popup/popupPreload.js')
         }
     })
 
@@ -49,7 +41,7 @@ app.on('window-all-closed', () => {
 
 ipcMain.on('btnSelectSlippiDirectory-click', () => {
     dialog.showOpenDialog({properties: ['openDirectory']}).then(result => {
-        store.set('slippiReplayDir', result.filePaths[0])
+        settings.store.set('slippiReplayDir', result.filePaths[0])
         mainWindow.webContents.send('slippiReplayDirUpdated', result.filePaths[0])
     })
 })
@@ -57,6 +49,7 @@ ipcMain.on('btnSelectSlippiDirectory-click', () => {
 const showStatsPopup = (settings, stats) => {
     createPopup()
     let arg = { settings: settings, stats: stats }
+    console.log(arg)
     popupWindow.webContents.send('update-stats', arg)
     setTimeout(() => { closeStatsPopup()}, 10000)
 }
@@ -67,13 +60,21 @@ const closeStatsPopup = () => {
 
 app.whenReady().then(() => {
     createWindow()
-    slippiReplayWatcher.start(store.get('slippiReplayDir'), () => {
-        console.log('Game started')
+    slippiReplayWatcher.start(settings.store.get('slippiReplayDir'), () => {
+        closeStatsPopup()
     }, (gameSettings, stats) => {
         showStatsPopup(gameSettings, stats)
     })
 })
 
-// setTimeout(() => {
-//     showStatsPopup(null, null)
-// }, 1000);
+setTimeout(() => {
+    fs.readFile('./exampleData/stats.json', 'utf8', (err, data) => {
+        if (err) {
+            console.log(`Error reading file from disk: ${err}`)
+        } else {
+            // parse JSON string to JSON object
+            const statsFile = JSON.parse(data)
+            showStatsPopup(statsFile.settings, statsFile.stats)
+        }
+    });
+}, 1000);

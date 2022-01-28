@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="dark">
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
@@ -7,17 +7,34 @@
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <link href="../css/main.css" rel="stylesheet">
   </head>
-  <body>
-    <span id="test"></span>
-    <div>
-      <p>Port 1</p>
-      <p>name: <span id="p1name"></span></p>
-      <p>lcancel: <span id="p1lcancel"></span></p>
-    </div>
-    <div>
-      <p>Port 1</p>
-      <p>name: <span id="p2name"></span></p>
-      <p>lcancel: <span id="p2lcancel"></span></p>
+  <body class="font-mono dark:bg-black dark:text-cyan-300">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="container">
+        <div class="container text-center">
+          <span class="text-xl text-center" id="p1name"></span>
+        </div>
+        <table class="min-w-full divide-y divide-gray-200">
+          <tbody class="bg-slate-700 divide-y divide-slate-800">
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">L-Cancel</td>
+              <td class="px-6 py-4 whitespace-nowrap"><span id="p1lcancel"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="container">
+        <div class="container text-center">
+          <span class="text-xl text-center" id="p2name"></span>
+        </div>
+        <table class="min-w-full divide-y divide-gray-200">
+          <tbody class="bg-slate-700 divide-y divide-slate-800">
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">L-Cancel</td>
+              <td class="px-6 py-4 whitespace-nowrap"><span id="p2lcancel"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </body>
 </html>

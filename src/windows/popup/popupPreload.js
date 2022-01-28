@@ -6,8 +6,6 @@ const { ipcRenderer } = require('electron');
 ipcRenderer.on('update-stats', (event, arg) => {
     // Update the second interface or whatever you need to do
     // for example show an alert ...
-    document.getElementById("test").innerText = "test";
-
     document.getElementById("p1name").innerText = arg.settings.players[0].displayName;
     document.getElementById("p1lcancel").innerText = arg.stats.actionCounts[0].lCancelCount.success + "/" + arg.stats.actionCounts[0].lCancelCount.fail;
 
